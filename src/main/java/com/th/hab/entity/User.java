@@ -21,5 +21,5 @@ public class User {
     private String nm;
 
     @Column(length = 50)
-    private int email;
+    private String email;
 }

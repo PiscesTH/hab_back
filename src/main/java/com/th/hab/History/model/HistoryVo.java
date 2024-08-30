@@ -10,6 +10,6 @@ public class HistoryVo {
     private Long ihistory;
     private String date;
     private int amount;
-    private Category icategory;
+    private Category category;
     private String purpose;
 }

@@ -7,11 +7,13 @@ import com.th.hab.Repository.HistoryRepository;
 import com.th.hab.Repository.UserRepository;
 import com.th.hab.entity.History;
 import com.th.hab.entity.User;
+import com.th.hab.response.ApiResponse;
 import com.th.hab.response.ResVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -23,18 +25,19 @@ public class HistoryService {
     private final CategoryRepository categoryRepository;
     final Long tmpUserId = 1L;
 
-    public List<HistoryVo> getHistory() {
+    public ApiResponse<List<HistoryVo>> getHistory() {
         User user = userRepository.getReferenceById(tmpUserId);
         List<History> historyList = historyRepository.findAllByUser(user);
-        return historyList.stream().map(item ->
+        List<HistoryVo> resultList = historyList.stream().map(item ->
                 HistoryVo.builder()
                         .date(item.getDate())
                         .purpose(item.getPurpose())
                         .amount(item.getAmount())
                         .ihistory(item.getIhistory())
-                        .icategory(item.getCategory())
+                        .category(item.getCategory())
                         .build())
                 .toList();
+        return new ApiResponse<>(resultList);
     }
 
     public ResVo postHistory(HistoryDto dto) {

@@ -24,4 +24,10 @@ public class ApiResponse<T> {
         this.message = "OK";
         this.data = data;
     }
+
+    public ApiResponse(String message, T data) {
+        this.code = "200";
+        this.message = message;
+        this.data = data;
+    }
 }

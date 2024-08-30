@@ -3,6 +3,7 @@ package com.th.hab.History;
 import com.th.hab.History.model.HistoryDto;
 import com.th.hab.History.model.HistoryVo;
 import com.th.hab.response.ApiResponse;
+import com.th.hab.response.ResVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,12 @@ public class HistoryController {
 
     @GetMapping
     public ApiResponse<List<HistoryVo>> getHistory() {
-        return new ApiResponse<>(service.getHistory());
+        return service.getHistory();
     }
 
     @PostMapping
-    public ApiResponse<?> postHistory(@RequestBody HistoryDto dto) {
+    public ApiResponse<ResVo> postHistory(@RequestBody HistoryDto dto) {
 
-        return null;
+        return new ApiResponse<>(service.postHistory(dto));
     }
 }
