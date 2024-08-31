@@ -24,7 +24,6 @@ public class HistoryController {
 
     @PostMapping
     public ApiResponse<ResVo> postHistory(@RequestBody HistoryDto dto) {
-
         return new ApiResponse<>(service.postHistory(dto));
     }
 }
