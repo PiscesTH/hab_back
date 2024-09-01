@@ -4,10 +4,13 @@ package com.th.hab.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.th.hab.History.model.HistoryTotalVo;
+import com.th.hab.History.model.HistoryTotalDto;
+import com.th.hab.entity.History;
+import com.th.hab.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.th.hab.entity.QHistory.history;
@@ -17,17 +20,39 @@ import static com.th.hab.entity.QHistory.history;
 public class HistoryQdslRepositoryImpl extends HistorySearchCondition implements HistoryQdslRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
+//    한달 동안의 카테고리별 지출
     @Override
-    public List<HistoryTotalVo> selHistoryGroupTotal() {
-        JPAQuery<HistoryTotalVo> query = jpaQueryFactory.select(Projections.fields(HistoryTotalVo.class,
+    public List<HistoryTotalDto> selHistoryMonthlyTotal(User user) {
+        JPAQuery<HistoryTotalDto> query = jpaQueryFactory.select(Projections.fields(HistoryTotalDto.class,
                         history.category.category.as("name"), history.amount.sum().as("total")
                 ))
                 .from(history)
-                .groupBy(history.category)
-                .where(whereIcategoryNeq(5));
+//                .where(whereIcategoryNeq(5))
+//                .where(whereMonthEq(LocalDate.now().getMonthValue()))
+                .where(whereMonthEq(8))
+                .where(whereUserEq(user))
+                .groupBy(history.category);
+        return query.fetch();
+    }
+
+//    일주일동안의 일 별 지출
+    @Override
+    public List<History> selHistoryForAWeek(User user) {
+        JPAQuery<History> query = jpaQueryFactory.select(Projections.fields(History.class,
+                history.date, history.amount.sum().as("amount")
+                ))
+                .from(history)
+                .where(whereDateGt(7))
+                .where(whereIcategoryNeq(5))
+                .where(whereUserEq(user))
+                .groupBy(history.date)
+                .orderBy(history.date.asc());
+
         return query.fetch();
     }
 }
+
+
 
 /*
     @Override

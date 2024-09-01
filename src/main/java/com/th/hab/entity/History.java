@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 public class History extends BaseEntity {
@@ -29,5 +31,5 @@ public class History extends BaseEntity {
     private String purpose;
 
     @Column
-    private String date;
+    private LocalDateTime date;
 }

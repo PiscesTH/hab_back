@@ -1,6 +1,8 @@
 package com.th.hab.History;
 
 import com.th.hab.History.model.HistoryDto;
+import com.th.hab.History.model.HistoryTotalDto;
+import com.th.hab.History.model.HistoryTotalVo;
 import com.th.hab.History.model.HistoryVo;
 import com.th.hab.Repository.CategoryRepository;
 import com.th.hab.Repository.HistoryRepository;
@@ -12,8 +14,8 @@ import com.th.hab.response.ResVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,12 +27,13 @@ public class HistoryService {
     private final CategoryRepository categoryRepository;
     final Long tmpUserId = 1L;
 
+
     public ApiResponse<List<HistoryVo>> getHistory() {
         User user = userRepository.getReferenceById(tmpUserId);
         List<History> historyList = historyRepository.findAllByUser(user);
         List<HistoryVo> resultList = historyList.stream().map(item ->
                 HistoryVo.builder()
-                        .date(item.getDate())
+                        .date(item.getDate().toLocalDate().toString())
                         .purpose(item.getPurpose())
                         .amount(item.getAmount())
                         .ihistory(item.getIhistory())
@@ -50,5 +53,23 @@ public class HistoryService {
         history.setCategory(categoryRepository.getReferenceById(dto.getIcategory()));
         historyRepository.save(history);
         return new ResVo(history.getIhistory().intValue());
+    }
+
+    @Transactional
+    public HistoryTotalVo getHistoryStatistics() {
+        User user = userRepository.getReferenceById(tmpUserId);
+        List<HistoryTotalDto> monthly = historyRepository.selHistoryMonthlyTotal(user);
+        log.info("monthly:{}", monthly);
+        List<History> tmpWeekly = historyRepository.selHistoryForAWeek(user);
+        List<HistoryTotalDto> weekly = tmpWeekly.stream().map(item ->
+                HistoryTotalDto.builder()
+                        .name(item.getDate().toLocalDate().toString())
+                        .total(item.getAmount())
+                        .build())
+                .toList();
+        log.info("weekly:{}", weekly);
+        HistoryTotalVo result = new HistoryTotalVo(monthly, weekly);
+        log.info("result:{}", result);
+        return result;
     }
 }

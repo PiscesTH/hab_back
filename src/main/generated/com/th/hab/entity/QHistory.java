@@ -31,7 +31,7 @@ public class QHistory extends EntityPathBase<History> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final StringPath date = createString("date");
+    public final DateTimePath<java.time.LocalDateTime> date = createDateTime("date", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> ihistory = createNumber("ihistory", Long.class);
 

@@ -1,6 +1,7 @@
 package com.th.hab.History;
 
 import com.th.hab.History.model.HistoryDto;
+import com.th.hab.History.model.HistoryTotalVo;
 import com.th.hab.History.model.HistoryVo;
 import com.th.hab.response.ApiResponse;
 import com.th.hab.response.ResVo;
@@ -25,5 +26,12 @@ public class HistoryController {
     @PostMapping
     public ApiResponse<ResVo> postHistory(@RequestBody HistoryDto dto) {
         return new ApiResponse<>(service.postHistory(dto));
+    }
+
+    @GetMapping("/statistics")
+    public ApiResponse<HistoryTotalVo> getHistoryStatistics() {
+        ApiResponse<HistoryTotalVo> result = new ApiResponse<>(service.getHistoryStatistics());
+        log.info("last : {}", result);
+        return result;
     }
 }

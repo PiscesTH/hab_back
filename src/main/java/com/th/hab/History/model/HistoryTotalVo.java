@@ -1,9 +1,22 @@
 package com.th.hab.History.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Data
+@AllArgsConstructor
 public class HistoryTotalVo {
-    private String name;
-    private int total;
+    private List<HistoryTotalDto> monthly;
+    private List<HistoryTotalDto> weekly;
+
+    @Override
+    public String toString() {
+        return "HistoryTotalVo{" +
+                "monthly=" + Arrays.toString(monthly.toArray()) +
+                ", weekly=" + Arrays.toString(weekly.toArray()) +
+                '}';
+    }
 }

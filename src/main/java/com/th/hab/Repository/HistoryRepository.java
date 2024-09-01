@@ -1,6 +1,5 @@
 package com.th.hab.Repository;
 
-import com.th.hab.History.model.HistoryTotalVo;
 import com.th.hab.entity.History;
 import com.th.hab.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
