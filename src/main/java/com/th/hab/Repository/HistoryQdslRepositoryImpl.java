@@ -27,9 +27,7 @@ public class HistoryQdslRepositoryImpl extends HistorySearchCondition implements
                         history.category.category.as("name"), history.amount.sum().as("total")
                 ))
                 .from(history)
-//                .where(whereIcategoryNeq(5))
-//                .where(whereMonthEq(LocalDate.now().getMonthValue()))
-                .where(whereMonthEq(8))
+                .where(whereMonthEq(LocalDate.now().getMonthValue()))
                 .where(whereUserEq(user))
                 .groupBy(history.category);
         return query.fetch();

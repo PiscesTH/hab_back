@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -31,7 +32,9 @@ public class HistoryService {
     public ApiResponse<List<HistoryVo>> getHistory() {
         User user = userRepository.getReferenceById(tmpUserId);
         List<History> historyList = historyRepository.findAllByUser(user);
-        List<HistoryVo> resultList = historyList.stream().map(item ->
+        List<HistoryVo> resultList = historyList.stream()
+                .sorted(Comparator.comparing(History::getDate).reversed())
+                .map(item ->
                 HistoryVo.builder()
                         .date(item.getDate().toLocalDate().toString())
                         .purpose(item.getPurpose())
@@ -47,7 +50,7 @@ public class HistoryService {
         User user = userRepository.getReferenceById(tmpUserId);
         History history = new History();
         history.setAmount(dto.getAmount());
-        history.setDate(dto.getDate());
+        history.setDate(dto.getDate().atStartOfDay());
         history.setUser(user);
         history.setPurpose(dto.getPurpose());
         history.setCategory(categoryRepository.getReferenceById(dto.getIcategory()));
@@ -67,9 +70,6 @@ public class HistoryService {
                         .total(item.getAmount())
                         .build())
                 .toList();
-        log.info("weekly:{}", weekly);
-        HistoryTotalVo result = new HistoryTotalVo(monthly, weekly);
-        log.info("result:{}", result);
-        return result;
+        return new HistoryTotalVo(monthly, weekly);
     }
 }
