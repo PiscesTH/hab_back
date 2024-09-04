@@ -4,7 +4,7 @@ package com.th.hab.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.th.hab.History.model.HistoryTotalDto;
+import com.th.hab.history.model.HistoryTotalDto;
 import com.th.hab.entity.History;
 import com.th.hab.entity.User;
 import lombok.RequiredArgsConstructor;

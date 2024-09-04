@@ -1,8 +1,7 @@
-package com.th.hab.History;
+package com.th.hab.history;
 
-import com.th.hab.History.model.HistoryDto;
-import com.th.hab.History.model.HistoryTotalVo;
-import com.th.hab.History.model.HistoryVo;
+
+import com.th.hab.history.model.*;
 import com.th.hab.response.ApiResponse;
 import com.th.hab.response.ResVo;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,8 @@
-package com.th.hab.History.model;
+package com.th.hab.history.model;
 
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class HistoryDto {

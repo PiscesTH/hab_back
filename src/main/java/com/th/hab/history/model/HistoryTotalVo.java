@@ -1,4 +1,4 @@
-package com.th.hab.History.model;
+package com.th.hab.history.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

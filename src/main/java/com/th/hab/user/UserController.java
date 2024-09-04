@@ -1,10 +1,11 @@
-package com.th.hab.User;
+package com.th.hab.user;
 
-import com.th.hab.User.model.UserSignInDto;
-import com.th.hab.User.model.UserSignInVo;
-import com.th.hab.User.model.UserSignUpDto;
+import com.th.hab.user.model.UserSignInDto;
+import com.th.hab.user.model.UserSignInVo;
+import com.th.hab.user.model.UserSignUpDto;
 import com.th.hab.response.ApiResponse;
 import com.th.hab.response.ResVo;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class UserController {
         return service.postSignUp(dto);
     }
 
-    @PostMapping("/signout")
-    public ApiResponse<ResVo> postSignout(HttpServletResponse res) {
-        return new ApiResponse<>(service.signout(res));
+    @PostMapping("/sign-out")
+    public ApiResponse<ResVo> postSignout(HttpServletResponse res, HttpServletRequest req) {
+        return new ApiResponse<>(service.signout(res, req));
     }
 }

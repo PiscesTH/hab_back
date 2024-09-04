@@ -1,4 +1,4 @@
-package com.th.hab.Category;
+package com.th.hab.category;
 
 import com.th.hab.Repository.CategoryRepository;
 import com.th.hab.entity.Category;

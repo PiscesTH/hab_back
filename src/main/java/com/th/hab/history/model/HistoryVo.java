@@ -1,4 +1,4 @@
-package com.th.hab.History.model;
+package com.th.hab.history.model;
 
 import com.th.hab.entity.Category;
 import lombok.Builder;

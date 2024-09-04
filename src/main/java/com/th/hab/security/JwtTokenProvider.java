@@ -73,6 +73,7 @@ public class JwtTokenProvider  {
         if (auth == null) {
             return null;
         }
+        log.info("auth:{}",auth);
         if (auth.startsWith(appProperties.getJwt().getTokenType())) {
             return auth.substring(appProperties.getJwt().getTokenType().length()).trim();
         }

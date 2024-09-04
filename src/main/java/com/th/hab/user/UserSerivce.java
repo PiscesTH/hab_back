@@ -1,9 +1,9 @@
-package com.th.hab.User;
+package com.th.hab.user;
 
 import com.th.hab.Repository.UserRepository;
-import com.th.hab.User.model.UserSignInDto;
-import com.th.hab.User.model.UserSignInVo;
-import com.th.hab.User.model.UserSignUpDto;
+import com.th.hab.user.model.UserSignInDto;
+import com.th.hab.user.model.UserSignInVo;
+import com.th.hab.user.model.UserSignUpDto;
 import com.th.hab.common.AppProperties;
 import com.th.hab.common.Const;
 import com.th.hab.common.MyCookieUtils;
@@ -15,15 +15,17 @@ import com.th.hab.response.ResVo;
 import com.th.hab.security.AuthenticationFacade;
 import com.th.hab.security.JwtTokenProvider;
 import com.th.hab.security.MyPrincipal;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static com.th.hab.common.Const.rtName;
 import static com.th.hab.exception.AuthErrorCode.*;
@@ -79,15 +81,16 @@ public class UserSerivce {
         int rtCookieMaxAge = appProperties.getJwt().getRefreshCookieMaxAge();
         myCookieUtils.deleteCookie(res, rtName);
         myCookieUtils.setCookie(res, rtName, rt, rtCookieMaxAge);
-        log.info("rt : {}", rt);
 
         return UserSignInVo.builder()
                 .accessToken(at)
                 .build();
     }
     //로그 아웃
-    public ResVo signout(HttpServletResponse res) {
-        myCookieUtils.deleteCookie(res, rtName);
+    public ResVo signout(HttpServletResponse res, HttpServletRequest req) {
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(req, res, SecurityContextHolder.getContext().getAuthentication());
+        myCookieUtils.deleteCookie(res, "accessToken");
         return new ResVo(Const.SUCCESS);
     }
 }
