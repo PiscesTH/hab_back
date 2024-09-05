@@ -14,7 +14,7 @@ public class AuthenticationFacade {
         return (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    public int getLoginUserPk() {
+    public long getLoginUserPk() {
         if (getLoginUser() == null) {
             return 0;
         }
