@@ -91,6 +91,7 @@ public class UserSerivce {
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
         logoutHandler.logout(req, res, SecurityContextHolder.getContext().getAuthentication());
         myCookieUtils.deleteCookie(res, "accessToken");
+        myCookieUtils.deleteCookie(res, "refreshToken");
         return new ResVo(Const.SUCCESS);
     }
 }
