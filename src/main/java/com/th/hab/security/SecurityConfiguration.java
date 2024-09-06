@@ -26,11 +26,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(author -> author.requestMatchers(
                                         "/*"
                                 ).permitAll()
-/*                                .requestMatchers("/api/admin").permitAll()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/api/board").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/api/board").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/api/board/write").authenticated()*/
+                                .requestMatchers(HttpMethod.POST, "/api/history").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "api/history/*").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

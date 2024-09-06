@@ -81,23 +81,25 @@ public class HistoryService {
             map.put(getKey(history.getDate()), dto);
         }
         LocalDate baseDay = LocalDate.now().minusDays(7);
-        for (int i = 0; i < 7; i++) {
+        for (int i = 1; i < 8; i++) {
             String key = getKey(baseDay.atStartOfDay());
             map.computeIfAbsent(key, HistoryTotalDto::new);
             baseDay = baseDay.plusDays(1);
         }
         List<HistoryTotalDto> weekly = map.values().stream().sorted().toList();
-/*        List<HistoryTotalDto> weekly = tmpWeekly.stream().map(item ->
-                        HistoryTotalDto.builder()
-                                .name(item.getDate().toLocalDate().toString())
-                                .total(item.getAmount())
-                                .build())
-                .toList();*/
+
         log.info("weekly : {}", weekly);
         return new HistoryTotalVo(monthly, weekly);
     }
 
     private String getKey(LocalDateTime time) {
         return time.getYear() + "-" + String.format("%02d", time.getMonthValue()) + "-" + String.format("%02d", time.getDayOfMonth());
+    }
+
+    public ResVo delHistory(long ihistory) {
+        long userPk = authenticationFacade.getLoginUserPk();
+        User user = userRepository.getReferenceById(userPk);
+        historyRepository.deleteByIhistoryAndUser(ihistory, user);
+        return new ResVo((int)ihistory);
     }
 }

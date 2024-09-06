@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface HistoryRepository extends JpaRepository<History, Long>, HistoryQdslRepository {
     List<History> findAllByUser(User user);
+    long deleteByIhistoryAndUser(long ihistory, User user);
 }

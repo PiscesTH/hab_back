@@ -33,4 +33,9 @@ public class HistoryController {
         log.info("last : {}", result);
         return result;
     }
+
+    @DeleteMapping("/{ihistory}")
+    public ApiResponse<ResVo> delHistory(@PathVariable long ihistory) {
+        return new ApiResponse<>(service.delHistory(ihistory));
+    }
 }
