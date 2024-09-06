@@ -30,7 +30,6 @@ public class HistoryController {
     @GetMapping("/statistics")
     public ApiResponse<HistoryTotalVo> getHistoryStatistics() {
         ApiResponse<HistoryTotalVo> result = new ApiResponse<>(service.getHistoryStatistics());
-        log.info("last : {}", result);
         return result;
     }
 

@@ -71,7 +71,6 @@ public class HistoryService {
         long userPk = authenticationFacade.getLoginUserPk();
         User user = userRepository.getReferenceById(userPk != 0 ? userPk : sampleUserId);
         List<HistoryTotalDto> monthly = historyRepository.selHistoryMonthlyTotal(user);
-        log.info("monthly:{}", monthly);
         List<History> tmpWeekly = historyRepository.selHistoryForAWeek(user);
         Map<String, HistoryTotalDto> map = new HashMap<>();
         for (History history : tmpWeekly) {
@@ -87,8 +86,6 @@ public class HistoryService {
             baseDay = baseDay.plusDays(1);
         }
         List<HistoryTotalDto> weekly = map.values().stream().sorted().toList();
-
-        log.info("weekly : {}", weekly);
         return new HistoryTotalVo(monthly, weekly);
     }
 
@@ -96,6 +93,7 @@ public class HistoryService {
         return time.getYear() + "-" + String.format("%02d", time.getMonthValue()) + "-" + String.format("%02d", time.getDayOfMonth());
     }
 
+    @Transactional
     public ResVo delHistory(long ihistory) {
         long userPk = authenticationFacade.getLoginUserPk();
         User user = userRepository.getReferenceById(userPk);
