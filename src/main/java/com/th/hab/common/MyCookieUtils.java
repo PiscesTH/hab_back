@@ -3,6 +3,8 @@ package com.th.hab.common;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,12 +23,21 @@ public class MyCookieUtils {
     }
 
     public void setCookie(HttpServletResponse response, String name, String value, int maxAge) {    //maxAge : 쿠키 유효시간(단위 : 초)
-        Cookie cookie = new Cookie(name, value);
+        ResponseCookie cookie =  ResponseCookie.from(name, value)
+                .path("/")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(maxAge)
+                .sameSite("Strict")
+                .build();
+
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        /*Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setMaxAge(maxAge);
-        response.addCookie(cookie);
+        response.addCookie(cookie);*/
     }
 
     public void deleteCookie(HttpServletResponse response, String name) {

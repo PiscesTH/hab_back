@@ -12,17 +12,18 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(RestApiException.class)
+    public ResponseEntity<Object> handleRestApiException(RestApiException e) {
+        log.warn("handleRestApiException", e);
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception e) {
         log.warn("handleException", e);
         return handleExceptionInternal(CommonErrorCode.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(RestApiException.class)
-    public ResponseEntity<Object> handleRestApiException(RestApiException e) {
-        log.warn("handleRestApiException", e);
-        return handleExceptionInternal(e.getErrorCode());
-    }
 
     public ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode) {
         return handleExceptionInternal(errorCode, errorCode.getMessage());

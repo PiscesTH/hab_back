@@ -1,6 +1,7 @@
 package com.th.hab.user;
 
 import com.th.hab.Repository.UserRepository;
+import com.th.hab.security.MyUserDetails;
 import com.th.hab.user.model.UserSignInDto;
 import com.th.hab.user.model.UserSignInVo;
 import com.th.hab.user.model.UserSignUpDto;
@@ -15,6 +16,7 @@ import com.th.hab.response.ResVo;
 import com.th.hab.security.AuthenticationFacade;
 import com.th.hab.security.JwtTokenProvider;
 import com.th.hab.security.MyPrincipal;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -86,6 +88,7 @@ public class UserSerivce {
                 .accessToken(at)
                 .build();
     }
+
     //로그 아웃
     public ResVo signout(HttpServletResponse res, HttpServletRequest req) {
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
@@ -95,4 +98,27 @@ public class UserSerivce {
         return new ResVo(Const.SUCCESS);
     }
 
+    //accessToken 재발급
+    public UserSignInVo getRefreshToken(HttpServletRequest req) {
+        Cookie cookie = myCookieUtils.getCookie(req, rtName);
+        if (cookie == null) {
+            return UserSignInVo.builder()
+                    .accessToken(null)
+                    .build();
+        }
+        String token = cookie.getValue();
+        if (!jwtTokenProvider.isValidateToken(token)) {
+            return UserSignInVo.builder()
+                    .accessToken(null)
+                    .build();
+        }
+        MyUserDetails myUserDetails = (MyUserDetails) jwtTokenProvider.getUserDetailsFromToken(token);
+        MyPrincipal myPrincipal = myUserDetails.getMyPrincipal();
+
+        String at = jwtTokenProvider.generateAccessToken(myPrincipal);
+
+        return UserSignInVo.builder()
+                .accessToken(at)
+                .build();
+    }
 }
