@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -32,5 +33,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer { //새로고침
                         return new ClassPathResource("/static/index.html");
                     }
                 });
+    }
+
+    //cors설정 - 전역
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "DELETE", "UPDATE") // 허용할 HTTP method
+                .allowCredentials(true); // 쿠키 인증 요청 허용
     }
 }
