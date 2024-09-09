@@ -1,6 +1,6 @@
 package com.th.hab.category;
 
-import com.th.hab.Repository.CategoryRepository;
+import com.th.hab.repository.CategoryRepository;
 import com.th.hab.entity.Category;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

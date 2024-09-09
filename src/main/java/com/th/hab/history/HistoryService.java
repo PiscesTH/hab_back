@@ -1,14 +1,14 @@
 package com.th.hab.history;
 
+import com.th.hab.entity.History;
+import com.th.hab.entity.User;
 import com.th.hab.history.model.HistoryDto;
 import com.th.hab.history.model.HistoryTotalDto;
 import com.th.hab.history.model.HistoryTotalVo;
 import com.th.hab.history.model.HistoryVo;
-import com.th.hab.Repository.CategoryRepository;
-import com.th.hab.Repository.HistoryRepository;
-import com.th.hab.Repository.UserRepository;
-import com.th.hab.entity.History;
-import com.th.hab.entity.User;
+import com.th.hab.repository.CategoryRepository;
+import com.th.hab.repository.HistoryRepository;
+import com.th.hab.repository.UserRepository;
 import com.th.hab.response.ApiResponse;
 import com.th.hab.response.ResVo;
 import com.th.hab.security.AuthenticationFacade;
@@ -19,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,25 +33,16 @@ public class HistoryService {
     private final AuthenticationFacade authenticationFacade;
     final Long sampleUserId = 1L;
 
-
+    @Transactional
     public ApiResponse<List<HistoryVo>> getHistory() {
         long userPk = authenticationFacade.getLoginUserPk();
         User user = userRepository.getReferenceById(userPk != 0 ? userPk : sampleUserId);
-        List<History> historyList = historyRepository.findAllByUser(user);
-        List<HistoryVo> resultList = historyList.stream()
-                .sorted(Comparator.comparing(History::getDate).reversed())
-                .map(item ->
-                        HistoryVo.builder()
-                                .date(item.getDate().toLocalDate().toString())
-                                .purpose(item.getPurpose())
-                                .amount(item.getAmount())
-                                .ihistory(item.getIhistory())
-                                .category(item.getCategory())
-                                .build())
-                .toList();
-        return new ApiResponse<>(resultList);
+        List<HistoryVo> historyList = historyRepository.findAllByUserOrderByIhistoryDescDateDesc(user);
+        historyList.forEach(historyVo -> historyVo.setDate(historyVo.getOriginDate().toLocalDate().toString()));
+        return new ApiResponse<>(historyList);
     }
 
+    @Transactional
     public ResVo postHistory(HistoryDto dto) {
         long userPk = authenticationFacade.getLoginUserPk();
         User user = userRepository.getReferenceById(userPk != 0 ? userPk : sampleUserId);

@@ -26,7 +26,7 @@ public class MyCookieUtils {
         ResponseCookie cookie =  ResponseCookie.from(name, value)
                 .path("/")
                 .httpOnly(true)
-                .secure(true)
+//                .secure(true)
                 .maxAge(maxAge)
                 .sameSite("Strict")
                 .build();
